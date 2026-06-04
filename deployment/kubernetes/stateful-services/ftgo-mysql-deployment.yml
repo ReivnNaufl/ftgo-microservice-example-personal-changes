@@ -12,13 +12,16 @@ spec:
   selector:
     role: ftgo-mysql
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: ftgo-mysql
 spec:
   serviceName: "mysql"
   replicas: 1
+  selector:
+    matchLabels:
+      role: ftgo-mysql
   template:
     metadata:
       labels:
@@ -27,10 +30,8 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: ftgo-mysql
-          image: msapatterns/mysql:latest
+          image: 193461098667.dkr.ecr.ap-southeast-1.amazonaws.com/mysql:latest
           imagePullPolicy: Always
-          args:
-              - "--ignore-db-dir=lost+found"
           ports:
               - containerPort: 3306
           env:

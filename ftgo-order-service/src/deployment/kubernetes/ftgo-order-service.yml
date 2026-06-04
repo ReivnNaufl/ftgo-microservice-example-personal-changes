@@ -17,7 +17,7 @@ spec:
   selector:
     svc: ftgo-order-service
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ftgo-order-service
@@ -25,6 +25,9 @@ metadata:
     application: ftgo
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      svc: ftgo-order-service
   strategy:
     rollingUpdate:
       maxUnavailable: 0
@@ -36,7 +39,7 @@ spec:
     spec:
       containers:
       - name: ftgo-order-service
-        image: msapatterns/ftgo-order-service:latest
+        image: 193461098667.dkr.ecr.ap-southeast-1.amazonaws.com/ftgo-order-service:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

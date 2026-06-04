@@ -1,0 +1,346 @@
+{
+  "info": {
+    "_postman_id": "9d51a069-822f-4c0a-8b2c-7b4f77ad5b2a",
+    "name": "FTGO API Gateway",
+    "description": "Requests for the FTGO API Gateway. Set the `baseUrl` collection variable to your API Gateway load balancer hostname, for example `http://a7b88dab8590247a486ec1211fb04541-251922903.ap-southeast-1.elb.amazonaws.com`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://a7b88dab8590247a486ec1211fb04541-251922903.ap-southeast-1.elb.amazonaws.com",
+      "type": "string"
+    },
+    {
+      "key": "consumerId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "restaurantId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Actuator",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": "Gateway health endpoint exposed by Spring Boot Actuator."
+          },
+          "response": []
+        },
+        {
+          "name": "Prometheus Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/prometheus",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "prometheus"
+              ]
+            },
+            "description": "Prometheus metrics endpoint if enabled and the gateway has metrics dependencies available."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Consumers",
+      "item": [
+        {
+          "name": "Create Consumer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": {\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Doe\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/consumers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "consumers"
+              ]
+            },
+            "description": "Proxied by the gateway to the consumer service: POST /consumers."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Consumer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": {\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Doe\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/consumers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "consumers"
+              ]
+            },
+            "description": "Proxied by the gateway to the consumer service: PUT /consumers. The upstream service may require the exact update payload it defines."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consumerId\": {{consumerId}},\n  \"restaurantId\": {{restaurantId}},\n  \"deliveryTime\": \"2026-06-04T18:30:00\",\n  \"deliveryAddress\": {\n    \"street1\": \"1 Market St\",\n    \"street2\": \"Suite 100\",\n    \"city\": \"San Francisco\",\n    \"state\": \"CA\",\n    \"zip\": \"94105\"\n  },\n  \"lineItems\": [\n    {\n      \"menuItemId\": \"1\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "description": "Proxied by the gateway to the order service: POST /orders."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Orders Root",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Gateway forwards PUT /orders to the order service. Replace this body with the upstream endpoint payload if used.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "description": "Gateway route exists for PUT /orders and forwards to the order service."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "description": "Proxied by the gateway to the order history service: GET /orders."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}"
+              ]
+            },
+            "description": "Handled by the API gateway aggregation handler: GET /orders/{orderId}."
+          },
+          "response": []
+        },
+        {
+          "name": "Revise Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"revisedOrderLineItems\": [\n    {\n      \"menuItemId\": \"1\",\n      \"quantity\": 2\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/revise",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}",
+                "revise"
+              ]
+            },
+            "description": "Gateway route exists for POST /orders/** and forwards to the order service. This is the usual FTGO revise-order endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}",
+                "cancel"
+              ]
+            },
+            "description": "Gateway route exists for POST /orders/** and forwards to the order service. This is the usual FTGO cancel-order endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Generic POST Order Subpath",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/<subpath>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}",
+                "<subpath>"
+              ]
+            },
+            "description": "Covers the gateway wildcard route POST /orders/**. Replace `<subpath>` with a real order-service endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Generic PUT Order Subpath",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/<subpath>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}",
+                "<subpath>"
+              ]
+            },
+            "description": "Covers the gateway wildcard route PUT /orders/**. Replace `<subpath>` with a real order-service endpoint."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

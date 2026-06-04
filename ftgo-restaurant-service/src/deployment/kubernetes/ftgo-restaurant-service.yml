@@ -9,7 +9,7 @@ spec:
   selector:
     svc: ftgo-restaurant-service
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ftgo-restaurant-service
@@ -18,6 +18,9 @@ metadata:
     svc: ftgo-restaurant-service
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      svc: ftgo-restaurant-service
   strategy:
     rollingUpdate:
       maxUnavailable: 0
@@ -29,7 +32,7 @@ spec:
     spec:
       containers:
       - name: ftgo-restaurant-service
-        image: msapatterns/ftgo-restaurant-service:latest
+        image: 193461098667.dkr.ecr.ap-southeast-1.amazonaws.com/ftgo-restaurant-service:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

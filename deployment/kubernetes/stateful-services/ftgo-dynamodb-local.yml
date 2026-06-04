@@ -9,15 +9,18 @@ spec:
   selector:
     svc: ftgo-dynamodb-local
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: ftgo-dynamodb-local
   labels:
     application: ftgo
 spec:
-  serviceName: "ftgo-dynamodb"
+  serviceName: "ftgo-dynamodb-local"
   replicas: 1
+  selector:
+    matchLabels:
+      svc: ftgo-dynamodb-local
   template:
     metadata:
       labels:
@@ -57,7 +60,7 @@ spec:
     spec:
       containers:
       - name: ftgo-dynamodb-local-init
-        image: msapatterns/dynamodblocal-init
+        image: 193461098667.dkr.ecr.ap-southeast-1.amazonaws.com/dynamodblocal-init:latest
         env:
           - name: AWS_DYNAMODB_ENDPOINT_URL
             value: http://ftgo-dynamodb-local:8000
